@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="./style.css" />
+    <title>Converter</title>
+  </head>
+
+  <body>
+    <div class="container">
+      <h1>Converter</h1>
+      <input
+        type="number"
+        id="inputValue"
+        placeholder="Enter value"
+        oninput="convert()"
+      />
+
+      <select id="fromUnit" onchange="convert()">
+        <option value="m">Meter (m)</option>
+        <option value="cm">Centimeter (cm)</option>
+        <option value="in">Inch (in)</option>
+        <option value="ft">Feet (ft)</option>
+        <option value="mm">Millimeter (mm)</option>
+        <option value="yd">Yard (yd)</option>
+        <option value="km">Kilometer (km)</option>
+      </select>
+      <select id="toUnit" onchange="convert()">
+        <option value="m">Meter (m)</option>
+        <option value="cm">Centimeter (cm)</option>
+        <option value="in">Inch (in)</option>
+        <option value="ft">Feet (ft)</option>
+        <option value="mm">Millimeter (mm)</option>
+        <option value="yd">Yard (yd)</option>
+        <option value="km">Kilometer (km)</option>
+      </select>
+      <p id="result"></p>
+    </div>
+
+    <script src="./convert.js"></script>
+  </body>
+</html>

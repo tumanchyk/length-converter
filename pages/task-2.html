@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="../style.css" />
+    <title>Converter</title>
+  </head>
+
+  <body>
+    <ul class="menu-list">
+      <li><a href="/">Task 1</a></li>
+      <li><a href="task-2.html">Task 2</a></li>
+      <li><a href="./task-3.html">Task 3</a></li>
+      <li><a href="./task-4.html">Task 4</a></li>
+    </ul>
+    <h1>Data Sorting and Selection</h1>
+
+    <label for="filterCondition">Filter Condition:</label>
+    <textarea
+      id="filterCondition"
+      placeholder='{"condition": {"include": [{"name": "John"}], "sortBy": ["email"]}}'
+    ></textarea>
+
+    <button onclick="applyFilterAndSort()">Apply Filter & Sort</button>
+
+    <ul id="resultList"></ul>
+
+    <script>
+      const data = {
+        data: [
+          { name: "John", email: "john2@mail.com" },
+          { name: "Ivan", email: "john1@mail.com" },
+          { name: "Jane", email: "jane@mail.com" },
+          { name: "John", email: "john3@mail.com" },
+        ],
+      };
+
+      function applyFilterAndSort() {
+        const filterCondition = document
+          .getElementById("filterCondition")
+          .value.trim();
+
+        try {
+          const parsedCondition = JSON.parse(filterCondition);
+
+          if (!parsedCondition.condition) {
+            console.error("Invalid condition format.");
+            return;
+          }
+
+          const includeRules = parsedCondition.condition.include || [];
+          const excludeRules = parsedCondition.condition.exclude || [];
+          const sortByRules = parsedCondition.condition.sortBy || [];
+
+          let filteredData = [...data.data];
+
+          if (includeRules.length > 0) {
+            filteredData = filteredData.filter((item) => {
+              return includeRules.some((rule) => {
+                const key = Object.keys(rule)[0];
+                const value = rule[key];
+                return item[key] === value;
+              });
+            });
+          }
+
+          if (excludeRules.length > 0) {
+            filteredData = filteredData.filter((item) => {
+              return !excludeRules.some((rule) => {
+                const key = Object.keys(rule)[0];
+                const value = rule[key];
+                return item[key] === value;
+              });
+            });
+          }
+
+          sortByRules.forEach((key) => {
+            filteredData.sort((a, b) => {
+              const aValue = a[key];
+              const bValue = b[key];
+              return aValue.localeCompare(bValue, undefined, {
+                numeric: true,
+                sensitivity: "base",
+              });
+            });
+          });
+
+          displayResults(filteredData);
+        } catch (error) {
+          console.error("Error parsing filter condition:", error);
+        }
+      }
+
+      function displayResults(dataList) {
+        const resultList = document.getElementById("resultList");
+        resultList.innerHTML = "";
+
+        dataList.forEach((item) => {
+          const listItem = document.createElement("li");
+          listItem.textContent = JSON.stringify(item);
+          resultList.appendChild(listItem);
+        });
+      }
+    </script>
+  </body>
+</html>
